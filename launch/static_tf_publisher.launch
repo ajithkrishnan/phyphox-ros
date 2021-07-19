@@ -1,0 +1,24 @@
+<?xml version=1.0?>
+<launch>
+
+  <arg name="rviz"      default="true"/>
+  <arg name="viz_veh"   default="true"/>
+  <arg name="x_forward" default="false"/>
+
+  <!-- Publish static transforms (base link to sensor links) -->
+  <include file="$(find phyphox)/launch/static_tf_publisher.launch">
+    <arg name="x_forward_base" default="$(arg x_forward)"/>
+  </include>
+
+  <!-- Launch local EKF node (Odom frame) -->
+  <node pkg="robot_localization" type="ekf_localization_node" name="ekf_local"
+        clear_params="true" output="screen">
+    <rosparam command="load" file="$(find robot_localization)/params/ekf_local.yaml"/>
+  </node>
+
+  <!-- RVIZ -->
+  <node if="$(arg rviz)" pkg="rviz" type="rviz" name="rviz"
+        args="-d $(find robot_localization)/viz/local.rviz"/>
+
+</launch> 
+
