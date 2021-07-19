@@ -6,6 +6,7 @@ import paho.mqtt.client as mqtt
 
 import rospy
 from tf.transformations import quaternion_from_euler
+import tf
 
 from sensor_msgs.msg import Imu, NavSatFix 
 
@@ -49,7 +50,7 @@ def on_message(client, userdata, msg):
     data = json.loads(msg.payload)
     imu_msg = Imu()
     imu_msg.header.stamp = rospy.Time.now()
-    imu_msg.header.frame_id = 'imu'
+    imu_msg.header.frame_id = 'base_link'
 
     imu_msg.linear_acceleration.x = data['lin_accY']
     imu_msg.linear_acceleration.y = -1*data['lin_accX']
@@ -64,7 +65,7 @@ def on_message(client, userdata, msg):
     yaw = compute_heading(data['magX'], data['magY'])
     pitch = compute_heading(data['magY'], data['magZ'])
     roll = compute_heading(data['magZ'], data['magX'])
-    print "yaw: ", yaw
+    #print "yaw: ", yaw
 
 
     #heading_quat = quaternion_from_euler(azimuth_yz, azimuth_zx, azimuth_xy)
@@ -80,12 +81,21 @@ def on_message(client, userdata, msg):
     gps_msg = NavSatFix()
     if data['gps_time'] != None:
         gps_msg.header.stamp = rospy.Time(data['gps_time'])
-    gps_msg.header.frame_id = 'odom'
+    gps_msg.header.frame_id = 'map'
     gps_msg.latitude = data['gpsLat']
     gps_msg.longitude = data['gpsLon']
     gps_msg.altitude = data['gpsZ']
 
     gps_pub.publish(gps_msg)
+
+    #br = tf.TransformBroadcaster()
+    #br.sendTransform((1.0, 2.0, 5.0),
+    #                 tf.transformations.quaternion_from_euler(roll, pitch, yaw),
+    #                 rospy.Time.now(),
+    #                 "base_link",
+    #                 "map")
+    #print "Sent TF transform"
+
 
     
 if __name__ == '__main__':
@@ -95,7 +105,7 @@ if __name__ == '__main__':
     rospy.init_node('phyphox_imu')
 
     imu_pub = rospy.Publisher('imu/data', Imu, queue_size=10)
-    gps_pub = rospy.Publisher('gps/data', NavSatFix, queue_size=10)
+    gps_pub = rospy.Publisher('gps/fix', NavSatFix, queue_size=10)
 
 
     mqtt_client = mqtt.Client(mqtt_client_name)
