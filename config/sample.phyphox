@@ -1,0 +1,17 @@
+<network>
+	<connection privacy="https://www.freeprivacypolicy.com/live/6594abb7-c906-40b5-afa8-05d55e58a8b7" service="mqtt/json" address="mqtt-server.local" receiveTopic="phone/config" sendTopic="phone/data" conversion="json" interval="0.1">	
+		<send id="lin_accX" type="buffer" datatype="number">lin_accX</send>
+        <send id="lin_accY" type="buffer" datatype="number">lin_accY</send>
+        <send id="lin_accZ" type="buffer" datatype="number">lin_accZ</send>
+        <send id="gyroX" type="buffer" datatype="number">gyroX</send>
+        <send id="gyroY" type="buffer" datatype="number">gyroY</send>
+        <send id="gyroZ" type="buffer" datatype="number">gyroZ</send>
+        <send id="magX" type="buffer" datatype="number">magX</send>
+        <send id="magY" type="buffer" datatype="number">magY</send>
+        <send id="magZ" type="buffer" datatype="number">magZ</send>
+	<send id="gps_time" type="buffer" datatype="number">gps_time</send>
+	<send id="gpsLat" type="buffer" datatype="number">gpsLat</send>
+	<send id="gpsLon" type="buffer" datatype="number">gpsLon</send>
+	<send id="gpsZ" type="buffer" datatype="number">gpsZ</send>
+	</connection>
+</network>
