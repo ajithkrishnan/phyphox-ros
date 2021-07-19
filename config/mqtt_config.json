@@ -1,0 +1,11 @@
+{
+	"phone":
+		{
+			"name": "flaser",
+			"ip": "192.168.1.2",
+			"port": "1880",
+			"laser_topic": "rhea/f0/scan",
+			"cmd_topic": "rhea/f0/cmd",
+			"scan": ""		
+		}
+}
